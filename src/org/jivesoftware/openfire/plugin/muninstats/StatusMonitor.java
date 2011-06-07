@@ -54,6 +54,7 @@ public class StatusMonitor {
 	private static final String LEGEND_SSESSIONS = "server_sessions";
 	private static final String LEGEND_INCOMING = "packets_in";
 	private static final String LEGEND_OUTGOING = "packets_out";
+	private static final String LEGEND_MEMMAX = "memory_max";
 	private static final String LEGEND_MEMTOTAL = "memory_total";
 	private static final String LEGEND_MEMUSED = "memory_used";
 	private static final String LEGEND_MEMFREE = "memory_free";
@@ -70,6 +71,7 @@ public class StatusMonitor {
 	private double activeUsers;
 	private double activeUserSessions;
 	private double activeServerSessions;
+	private double maxMemory;
 	private double totalMemory;
 	private double freeMemory;
 	private double usedMemory;
@@ -102,6 +104,7 @@ public class StatusMonitor {
 		activeUsers = 0;
 		activeUserSessions = 0;
 		activeServerSessions = 0;
+		maxMemory = 0;
 		totalMemory = 0;
 		freeMemory = 0;
 		usedMemory = 0;
@@ -127,6 +130,7 @@ public class StatusMonitor {
 	 */
 	public void updateMemStats () {
 		Runtime runtime = Runtime.getRuntime();
+	    maxMemory = (double) runtime.maxMemory() / (1024 * 1024);
 	    totalMemory = (double) runtime.totalMemory () / (1024 * 1024);
 	    freeMemory = (double) runtime.freeMemory () / (1024 * 1024);
 	    usedMemory = totalMemory - freeMemory;
@@ -175,6 +179,7 @@ public class StatusMonitor {
 			out.write (LEGEND_SSESSIONS + " " + (int) activeServerSessions + "\n");
 			out.write (LEGEND_INCOMING + " " + (int) packetMonitor.getPacketsIn() + "\n");
 			out.write (LEGEND_OUTGOING + " " + (int) packetMonitor.getPacketsOut() + "\n");
+			out.write (LEGEND_MEMMAX + " " + df.format (maxMemory) + "\n");
 			out.write (LEGEND_MEMTOTAL + " " + df.format (totalMemory) + "\n");
 			out.write (LEGEND_MEMUSED + " " + df.format (usedMemory) + "\n");
 			out.write (LEGEND_MEMFREE + " " + df.format (freeMemory) + "\n");
