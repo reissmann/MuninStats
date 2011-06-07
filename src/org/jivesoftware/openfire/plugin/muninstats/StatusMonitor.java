@@ -181,8 +181,9 @@ public class StatusMonitor {
 			out.write (LEGEND_MEMUSED + " " + df.format (usedMemory) + "\n");
 			out.write (LEGEND_MEMFREE + " " + df.format (freeMemory) + "\n");
 			out.close ();
+			//log.info("MuninStats written to log");
 		} catch (IOException e) {
-			log.error("Error writing to status logfile\n" + e.toString());
+			//log.error("Error writing to status logfile\n" + e.toString());
 		}
 	}
 
@@ -200,6 +201,9 @@ public class StatusMonitor {
 			updateServerToServerStats();
 			lastUpdate = (new Date()).getTime() / 1000L;
 			log();
+
+			//log.info("MuninStats: Test write to info.log");
+			//log.error("MuninStats: Test write to error.log");
 
 			executionTime = System.currentTimeMillis() + INTERVAL_TIME * 1000;
 			return true;

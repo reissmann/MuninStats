@@ -141,7 +141,7 @@ public class BackgroundThread implements Runnable {
 				}
 			}
 		} catch (Exception e) {
-			log.error("Error running BackgroundThread\n" + e.toString());
+			//log.error("Error running BackgroundThread\n" + e.toString());
 		}
 	}
 

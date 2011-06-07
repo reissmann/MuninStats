@@ -30,6 +30,7 @@ import org.jivesoftware.openfire.container.PluginManager;
 import org.jivesoftware.openfire.plugin.muninstats.BackgroundThread;
 import org.jivesoftware.openfire.plugin.muninstats.StatusMonitor;
 import org.jivesoftware.openfire.plugin.muninstats.PacketMonitor;
+import org.jivesoftware.util.JiveGlobals;
 
 import org.slf4j.Logger;
 import java.io.File;
@@ -44,11 +45,14 @@ import java.io.File;
  * 		- memory (available, free and used memory)
  * 		- server2server connections
  */
-public class MuninStats implements Plugin {	
+public class MuninStats implements Plugin {
 	private StatusMonitor statusMonitor;
 	private BackgroundThread backgroundThread;
 	private PacketMonitor packetMonitor;
 	private static Logger log;
+	
+	private String timeInterval = null;
+	private String statusFile = null;
 	
 	public MuninStats() {
 	}
@@ -58,6 +62,7 @@ public class MuninStats implements Plugin {
 	 * start the background thread and initialize the monitors
 	 */
 	public void initializePlugin(PluginManager manager, File pluginDirectory) {
+		//initSettings ();
 		backgroundThread = BackgroundThread.getInstance();
 		backgroundThread.init(this);
 		backgroundThread.start();
@@ -66,7 +71,7 @@ public class MuninStats implements Plugin {
 		packetMonitor = PacketMonitor.getInstance();
 		packetMonitor.init(this);
 
-		log.info("Plugin MuninStats initialized");
+		//log.info("Plugin MuninStats initialized");
 	}
 
 	/**
@@ -76,6 +81,19 @@ public class MuninStats implements Plugin {
 		packetMonitor.destroy();
 		statusMonitor.destroy();
 		backgroundThread.stop();
-		log.info ("Plugin MuninStats destroyed");
+		//log.info ("Plugin MuninStats destroyed");
+	}
+	
+	/**
+	 * load settings
+	 */
+	private void initSettings() {
+		try {
+			this.statusFile = JiveGlobals.getProperty("plugin.muninstats.statsfile");
+			this.timeInterval = JiveGlobals.getProperty("plugin.muninstats.interval");
+		} catch (Exception e) {
+			//log.error("Error loading settings\n" + e.toString());
+		}
+		//log.info("***\n***\nLoaded Properties:\n   statusFile: " + statusFile + "\n   timeInterval: " + timeInterval + "\n***\n***\n");
 	}
 }
