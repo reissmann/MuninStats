@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin>
+    <class>org.jivesoftware.openfire.plugin.MuninStats</class>
+	<name>MuninStats</name>
+	<description>Write server status information to a plain text file that can be processed by Munin or any other tools.</description>
+    <author>Sven Reissmann</author>
+    <version>1.0</version>
+    <date>06/06/2011</date>
+    <minServerVersion>3.3.0</minServerVersion>
+</plugin>
