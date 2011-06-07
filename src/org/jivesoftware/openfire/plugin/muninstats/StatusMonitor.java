@@ -25,11 +25,6 @@
  */
 package org.jivesoftware.openfire.plugin.muninstats;
 
-import java.io.*;
-import java.util.*;
-import org.slf4j.Logger;
-import java.text.DecimalFormat;
-
 import org.jivesoftware.openfire.SessionManager;
 import org.jivesoftware.openfire.plugin.muninstats.BackgroundThread;
 import org.jivesoftware.openfire.plugin.muninstats.Event;
@@ -37,15 +32,17 @@ import org.jivesoftware.openfire.plugin.muninstats.StatusMonitor;
 import org.jivesoftware.openfire.session.ClientSession;
 import org.jivesoftware.openfire.user.UserManager;
 
+import java.io.*;
+import java.util.*;
+import java.text.DecimalFormat;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 /**
  * log status information
  * this class collects information on registered users, users online, 
  * ressources online, packets in and out and memory information. the 
  * information is being written to a status logfile every INTERVAL_TIME
- * 
- * @TODO	configuration settings (INTERVAL_TIME, STATUS_LOGFILE) should 
- * 			be done in openfire configuration, not inside the plugin code
  */
 public class StatusMonitor {
 	private static final long INTERVAL_TIME = 5 * 60;
@@ -65,7 +62,8 @@ public class StatusMonitor {
 	private UserManager userManager;
 	private SessionManager sessionManager;
 	private PacketMonitor packetMonitor;
-	public static Logger log;
+	private static final Logger log = LoggerFactory.getLogger(StatusMonitor.class);
+
 
 	private long lastUpdate;
 	private double registeredUsers;
@@ -181,9 +179,8 @@ public class StatusMonitor {
 			out.write (LEGEND_MEMUSED + " " + df.format (usedMemory) + "\n");
 			out.write (LEGEND_MEMFREE + " " + df.format (freeMemory) + "\n");
 			out.close ();
-			//log.info("MuninStats written to log");
 		} catch (IOException e) {
-			//log.error("Error writing to status logfile\n" + e.toString());
+			log.error("Error writing to status logfile\n" + e.toString());
 		}
 	}
 
@@ -201,9 +198,6 @@ public class StatusMonitor {
 			updateServerToServerStats();
 			lastUpdate = (new Date()).getTime() / 1000L;
 			log();
-
-			//log.info("MuninStats: Test write to info.log");
-			//log.error("MuninStats: Test write to error.log");
 
 			executionTime = System.currentTimeMillis() + INTERVAL_TIME * 1000;
 			return true;
