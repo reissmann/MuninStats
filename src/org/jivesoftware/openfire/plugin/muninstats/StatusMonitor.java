@@ -25,16 +25,17 @@
  */
 package org.jivesoftware.openfire.plugin.muninstats;
 
-import org.jivesoftware.openfire.SessionManager;
-import org.jivesoftware.openfire.session.ClientSession;
-import org.jivesoftware.openfire.user.UserManager;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
+
+import org.jivesoftware.openfire.SessionManager;
+import org.jivesoftware.openfire.session.ClientSession;
+import org.jivesoftware.openfire.user.UserManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -178,10 +179,10 @@ public class StatusMonitor {
 			out.format ("%s %d\n", LEGEND_SSESSIONS, activeServerSessions);
 			out.format ("%s %d\n", LEGEND_INCOMING, packetMonitor.getPacketsIn());
 			out.format ("%s %d\n", LEGEND_OUTGOING, packetMonitor.getPacketsOut());
-			out.format ("%s %.3f\n", LEGEND_MEMMAX, maxMemory);
-			out.format ("%s %.3f\n", LEGEND_MEMTOTAL, totalMemory);
-			out.format ("%s %.3f\n", LEGEND_MEMUSED, usedMemory);
-			out.format ("%s %.3f\n", LEGEND_MEMFREE, freeMemory);
+			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMMAX, maxMemory);
+			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMTOTAL, totalMemory);
+			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMUSED, usedMemory);
+			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMFREE, freeMemory);
 			out.close ();
 		} catch (IOException e) {
 			log.error("Error writing to status logfile\n" + e.toString());
