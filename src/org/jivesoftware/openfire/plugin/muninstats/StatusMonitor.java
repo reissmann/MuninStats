@@ -173,12 +173,12 @@ public class StatusMonitor {
 			FileOutputStream fstream = new FileOutputStream(STATUS_LOGFILE);
 			PrintStream out = new PrintStream(fstream);
 			out.format ("%s %d\n", LEGEND_UPDATE, lastUpdate);
-			out.format ("%s %d\n", LEGEND_REGISTERED, registeredUsers);
-			out.format ("%s %d\n", LEGEND_ONLINE, activeUsers);
-			out.format ("%s %d\n", LEGEND_USESSIONS, activeUserSessions);
-			out.format ("%s %d\n", LEGEND_SSESSIONS, activeServerSessions);
-			out.format ("%s %d\n", LEGEND_INCOMING, packetMonitor.getPacketsIn());
-			out.format ("%s %d\n", LEGEND_OUTGOING, packetMonitor.getPacketsOut());
+			out.format ("%s %d\n", LEGEND_REGISTERED, (int) registeredUsers);
+			out.format ("%s %d\n", LEGEND_ONLINE, (int) activeUsers);
+			out.format ("%s %d\n", LEGEND_USESSIONS, (int) activeUserSessions);
+			out.format ("%s %d\n", LEGEND_SSESSIONS, (int) activeServerSessions);
+			out.format ("%s %d\n", LEGEND_INCOMING, (int) packetMonitor.getPacketsIn());
+			out.format ("%s %d\n", LEGEND_OUTGOING, (int) packetMonitor.getPacketsOut());
 			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMMAX, maxMemory);
 			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMTOTAL, totalMemory);
 			out.format (Locale.ROOT, "%s %.3f\n", LEGEND_MEMUSED, usedMemory);
