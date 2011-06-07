@@ -30,7 +30,7 @@ import org.jivesoftware.openfire.interceptor.PacketInterceptor;
 import org.jivesoftware.openfire.interceptor.PacketRejectedException;
 import org.jivesoftware.openfire.plugin.MuninStats;
 import org.jivesoftware.openfire.session.Session;
-import org.xmpp.packet.*;
+import org.xmpp.packet.Packet;
 
 /**
  * This class counts the incoming and outgoing packets

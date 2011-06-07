@@ -26,17 +26,17 @@
 package org.jivesoftware.openfire.plugin.muninstats;
 
 import org.jivesoftware.openfire.SessionManager;
-import org.jivesoftware.openfire.plugin.muninstats.BackgroundThread;
-import org.jivesoftware.openfire.plugin.muninstats.Event;
-import org.jivesoftware.openfire.plugin.muninstats.StatusMonitor;
 import org.jivesoftware.openfire.session.ClientSession;
 import org.jivesoftware.openfire.user.UserManager;
 
-import java.io.*;
-import java.util.*;
-import java.text.DecimalFormat;
-import org.slf4j.LoggerFactory;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * log status information
@@ -168,21 +168,20 @@ public class StatusMonitor {
 	 * log to status logfile
 	 */
 	private void log() {
-		DecimalFormat df = new DecimalFormat("#.###");
 		try {
-			FileWriter fstream = new FileWriter (STATUS_LOGFILE);
-			BufferedWriter out = new BufferedWriter (fstream);
-			out.write (LEGEND_UPDATE + " " + (int) lastUpdate + "\n");
-			out.write (LEGEND_REGISTERED + " " + (int) registeredUsers + "\n");
-			out.write (LEGEND_ONLINE + " " + (int) activeUsers + "\n");
-			out.write (LEGEND_USESSIONS + " " + (int) activeUserSessions + "\n");
-			out.write (LEGEND_SSESSIONS + " " + (int) activeServerSessions + "\n");
-			out.write (LEGEND_INCOMING + " " + (int) packetMonitor.getPacketsIn() + "\n");
-			out.write (LEGEND_OUTGOING + " " + (int) packetMonitor.getPacketsOut() + "\n");
-			out.write (LEGEND_MEMMAX + " " + df.format (maxMemory) + "\n");
-			out.write (LEGEND_MEMTOTAL + " " + df.format (totalMemory) + "\n");
-			out.write (LEGEND_MEMUSED + " " + df.format (usedMemory) + "\n");
-			out.write (LEGEND_MEMFREE + " " + df.format (freeMemory) + "\n");
+			FileOutputStream fstream = new FileOutputStream(STATUS_LOGFILE);
+			PrintStream out = new PrintStream(fstream);
+			out.format ("%s %d\n", LEGEND_UPDATE, lastUpdate);
+			out.format ("%s %d\n", LEGEND_REGISTERED, registeredUsers);
+			out.format ("%s %d\n", LEGEND_ONLINE, activeUsers);
+			out.format ("%s %d\n", LEGEND_USESSIONS, activeUserSessions);
+			out.format ("%s %d\n", LEGEND_SSESSIONS, activeServerSessions);
+			out.format ("%s %d\n", LEGEND_INCOMING, packetMonitor.getPacketsIn());
+			out.format ("%s %d\n", LEGEND_OUTGOING, packetMonitor.getPacketsOut());
+			out.format ("%s %.3f\n", LEGEND_MEMMAX, maxMemory);
+			out.format ("%s %.3f\n", LEGEND_MEMTOTAL, totalMemory);
+			out.format ("%s %.3f\n", LEGEND_MEMUSED, usedMemory);
+			out.format ("%s %.3f\n", LEGEND_MEMFREE, freeMemory);
 			out.close ();
 		} catch (IOException e) {
 			log.error("Error writing to status logfile\n" + e.toString());
@@ -201,7 +200,7 @@ public class StatusMonitor {
 			updateUserStats();
 			updateMemStats();
 			updateServerToServerStats();
-			lastUpdate = (new Date()).getTime() / 1000L;
+			lastUpdate = System.currentTimeMillis() / 1000L;
 			log();
 
 			executionTime = System.currentTimeMillis() + INTERVAL_TIME * 1000;

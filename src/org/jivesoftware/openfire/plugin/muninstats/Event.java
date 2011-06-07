@@ -25,9 +25,6 @@
  */
 package org.jivesoftware.openfire.plugin.muninstats;
 
-import org.jivesoftware.openfire.plugin.muninstats.BackgroundThread;
-import org.jivesoftware.openfire.plugin.muninstats.Event;
-
 /**
  * This is the baseclass for all events.
  * Events are Objects which want to be executed at a specific time.

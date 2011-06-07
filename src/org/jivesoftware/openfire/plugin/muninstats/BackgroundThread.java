@@ -26,18 +26,15 @@
 package org.jivesoftware.openfire.plugin.muninstats;
 
 import org.jivesoftware.openfire.plugin.MuninStats;
-import org.jivesoftware.openfire.plugin.muninstats.BackgroundThread;
-import org.jivesoftware.openfire.plugin.muninstats.Event;
 
+import java.util.PriorityQueue;
 import org.slf4j.Logger;
-import java.util.*;
 
 /**
  * This class manages the background-thread
  * based on code by Martin Wuest
  */
 public class BackgroundThread implements Runnable {
-	private MuninStats plugin;
 	private Thread thread;
 	private boolean running;
 	public static Logger log;
@@ -54,7 +51,6 @@ public class BackgroundThread implements Runnable {
 	}
 
 	public void init(MuninStats plugin) {
-		this.plugin = plugin;
 	}
 	
 	/** 
