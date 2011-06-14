@@ -86,7 +86,9 @@ if [ "$1" = "config" ]; then
                         echo 'graph_title Openfire users'
                         echo 'graph_vlabel Number of Users'
                         echo 'users_online.label User Online'
+			echo 'users_online.draw AREA'
                         echo 'ressources_online.label Ressources Online'
+			echo 'ressources_online.draw AREA'
                         echo 'users_registered.label Users Registered'
                         ;;
                 memory)
@@ -101,11 +103,10 @@ if [ "$1" = "config" ]; then
                         ;;
                 throughput)
                         echo 'graph_title Openfire throughput'
-                        echo 'graph_vlabel Number of Packets'
-                        echo 'packets_in.label Eingehende Pakete'
-                        echo 'packets_out.label Ausgehende Pakete'
-                        echo 'packets_in.type DERIVE'
-                        echo 'packets_out.type DERIVE'
+                        echo 'graph_vlabel Packets in (-) / out (+)'
+                        echo 'packets_out.label Packets'
+			echo 'packets_in.graph no'
+			echo 'packets_out.negative packets_in'
                         ;;
         	s2s)
                         echo 'graph_title Openfire server2server connections'
