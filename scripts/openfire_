@@ -1,0 +1,175 @@
+#!/bin/sh
+# 
+# openfire_ - A Munin plugin for monitoring the Openfire Jabber server
+# 
+# This script depends on the Openfire plugin "MuninStats" that writes 
+# statistics to a plain text file. The text file is then being parsed 
+# by this Munin script.
+#
+# Copyright (C) 2011 Sven Reissmann <sven@0x80.io>
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+#  * The above copyright notice and this permission notice shall be included 
+#    in all copies or substantial portions of the Software.
+#
+#  * Except as contained in this notice, the name(s) of the above copyright
+#    holders shall not be used in advertising or otherwise to promote the sale,
+#    use or other dealings in this Software without prior written authorization.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+# DEALINGS IN THE SOFTWARE
+#
+# Version 0.2
+# You can get the openfire plugin at http://0x80.io/files/
+# 
+# Parameters understood:
+#
+#       config   (required)
+#       autoconf (optional - used by munin-config)
+#
+# Usage:
+#
+#       put this script to your Munin plugins directory and create symlinks
+#       for each monitor/graph you want to add.
+#
+#       openfire_users          graph the number of registered and online 
+#                               users as well as online ressources
+#       openfire_memory         graph the memory usage of the openfire server
+#       openfire_throughput     graph the number of packets in and out
+#       openfire_s2s		graph the number of server2server connections
+#
+# Configuration:
+#
+#	MAX_AGE		the maximum age of the statistics file in seconds.  
+#			if the value is greater than the allowed drift, we
+#			assume that the openfire plugin is not updating the 
+#			statusfile correctly
+#	STATUS_FILE	the absolute location of the statusfile that is written
+#			by the Openfire plugin MuninStats
+#
+#%# family=auto
+#%# capabilities=autoconf
+
+
+#############################
+# Configuration
+#############################
+MAX_AGE=300
+STATUS_FILE="/opt/openfire/resources/statistics/status.log"
+#############################
+
+
+#############################
+# Scriptcode
+#############################
+MONITOR=`basename $0 |sed 's/^openfire_//g'`
+
+if [ "$1" = "autoconf" ]; then
+        echo yes
+        exit 0
+fi
+
+if [ "$1" = "config" ]; then
+        case $MONITOR in
+                users)
+                        echo 'graph_title Openfire users'
+                        echo 'graph_vlabel Number of Users'
+                        echo 'users_online.label User Online'
+                        echo 'ressources_online.label Ressources Online'
+                        echo 'users_registered.label Users Registered'
+                        ;;
+                memory)
+                        echo 'graph_title Openfire memory'
+                        echo 'graph_vlabel Memory usage'
+                        echo 'memory_max.label Memory max'
+                        echo 'memory_total.label Memory available'
+                        echo 'memory_used.label Memory used'
+                        echo 'memory_used.draw AREA'
+                        echo 'memory_free.label Memory free'
+                        echo 'memory_free.draw STACK'
+                        ;;
+                throughput)
+                        echo 'graph_title Openfire throughput'
+                        echo 'graph_vlabel Number of Packets'
+                        echo 'packets_in.label Eingehende Pakete'
+                        echo 'packets_out.label Ausgehende Pakete'
+                        echo 'packets_in.type DERIVE'
+                        echo 'packets_out.type DERIVE'
+                        ;;
+        	s2s)
+                        echo 'graph_title Openfire server2server connections'
+                        echo 'graph_vlabel Number of connections'
+                        echo 'server_sessions.label Connections'
+			;;
+	esac
+        echo 'graph_category openfire'
+        echo 'graph_args --base 1000 -l 0'
+        exit 0
+fi
+
+#############################
+# Get data
+#############################
+NOW=`date +%s`
+UPDATED=`egrep "last_update" $STATUS_FILE |awk '{ print $2 }'`
+TIMEDIFF=$(($NOW - $UPDATED))
+ret=0
+
+case $MONITOR in
+        users)
+		if [ $TIMEDIFF -lt $MAX_AGE ]; then
+			egrep "users_registered" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+			egrep "users_online" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+			egrep "ressources_online" $STATUS_FILE|awk '{ print $1 ".value " $2 }'
+		else
+			echo users_registered.value
+			echo users_online.value
+			echo ressources_online.value
+			ret=1
+		fi
+                ;;
+        memory)
+		if [ $TIMEDIFF -lt $MAX_AGE ]; then
+                        egrep "memory_max" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+                        egrep "memory_total" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+                        egrep "memory_used" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+                        egrep "memory_free" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+		else
+			echo memory_total.value
+			echo memory_used.value
+			echo memory_free.value
+			ret=1
+		fi
+                ;;
+        throughput)
+		if [ $TIMEDIFF -lt $MAX_AGE ]; then
+                        egrep "packets_in" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+                        egrep "packets_out" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+		else
+			echo packets_in.value
+			echo packets_out.value
+			ret=1
+		fi
+                ;;
+	s2s)
+                if [ $TIMEDIFF -lt $MAX_AGE ]; then
+			egrep "server_sessions" $STATUS_FILE |awk '{ print $1 ".value " $2 }'
+		else
+			echo server_sessions.value
+			ret=1
+		fi
+		;;
+esac
+
+exit $ret
