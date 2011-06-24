@@ -25,9 +25,9 @@
  */
 package org.jivesoftware.openfire.plugin.muninstats;
 
-import org.jivesoftware.openfire.plugin.MuninStats;
-
 import java.util.PriorityQueue;
+
+import org.jivesoftware.openfire.plugin.MuninStats;
 import org.slf4j.Logger;
 
 /**
@@ -51,25 +51,27 @@ public class BackgroundThread implements Runnable {
 
 	public void init(MuninStats plugin) {
 	}
-	
-	/** 
+
+	/**
 	 * return singleton instance of the BackgroundThread
+	 * 
 	 * @return singleton instance
 	 */
 	public static BackgroundThread getInstance() {
 		return instance;
 	}
-	
+
 	/**
 	 * get a new event id (just the next increment)
+	 * 
 	 * @return event id
 	 */
 	public synchronized long getNewEventID() {
 		return incrementalEventID++;
 	}
 
-	/** 
-	 * start the internal thread 
+	/**
+	 * start the internal thread
 	 */
 	public void start() {
 		if (running) {
@@ -80,8 +82,8 @@ public class BackgroundThread implements Runnable {
 		thread.start();
 	}
 
-	/** 
-	 * stop the internal thread 
+	/**
+	 * stop the internal thread
 	 */
 	public void stop() {
 		running = false;
@@ -96,16 +98,17 @@ public class BackgroundThread implements Runnable {
 		thread = null;
 	}
 
-	/** 
+	/**
 	 * check whether the internal thread is running
+	 * 
 	 * @return true if the thread is running, otherwise false
 	 */
 	public boolean isRunning() {
 		return running;
 	}
 
-	/** 
-	 * process the eventloop 
+	/**
+	 * process the eventloop
 	 */
 	public void run() {
 		try {
@@ -114,8 +117,9 @@ public class BackgroundThread implements Runnable {
 				Event event;
 				synchronized (this) {
 					event = eventQueue.peek();
-					if ((event != null) && 
-						(System.currentTimeMillis() > event.getExecutionTime())) {
+					if ((event != null)
+							&& (System.currentTimeMillis() > event
+									.getExecutionTime())) {
 						// remove event from queue
 						eventQueue.poll();
 					} else {
@@ -136,13 +140,15 @@ public class BackgroundThread implements Runnable {
 				}
 			}
 		} catch (Exception e) {
-			//log.error("Error running BackgroundThread\n" + e.toString());
+			log.error("Plugin MuninStats: Error running BackgroundThread\n" + e.toString());
 		}
 	}
 
 	/**
 	 * add an event to the eventloop
-	 * @param event to be added
+	 * 
+	 * @param event
+	 * 		even to be added
 	 */
 	public void addEvent(Event event) {
 		if (event == null) {
@@ -155,7 +161,9 @@ public class BackgroundThread implements Runnable {
 
 	/**
 	 * remove an event from the eventloop
-	 * @param event to be removed
+	 * 
+	 * @param event
+	 * 		event to be removed
 	 */
 	public void removeEvent(Event event) {
 		if (event == null) {
