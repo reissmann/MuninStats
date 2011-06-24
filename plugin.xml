@@ -3,9 +3,9 @@
 <plugin>
     <class>org.jivesoftware.openfire.plugin.MuninStats</class>
 	<name>MuninStats</name>
-	<description>Write server status information to a plain text file that can be processed by Munin or any other tools.</description>
+	<description>Write server status information to a plain text file that can be processed by Munin or any other tool</description>
     <author>Sven Reissmann</author>
-    <version>1.0</version>
-    <date>06/06/2011</date>
+    <version>1.1</version>
+    <date>06/24/2011</date>
     <minServerVersion>3.3.0</minServerVersion>
 </plugin>

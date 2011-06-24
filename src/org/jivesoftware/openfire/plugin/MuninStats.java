@@ -93,7 +93,7 @@ public class MuninStats implements Plugin {
 		JiveGlobals.migrateProperty("plugin.muninstats.updateinterval");
 
 		if (JiveGlobals.getProperty("plugin.muninstats.statuslogfile") == null) {
-			this.statuslogfile = "/opt/openfire/resources/statistics/status.log";
+			this.statuslogfile = "/opt/openfire/resources/statistics/muninstats.log";
 		} else {
 			this.statuslogfile = JiveGlobals
 					.getProperty("plugin.muninstats.statuslogfile");

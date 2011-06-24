@@ -1,4 +1,4 @@
-An Openfire Monitoring plugin.
+MuninStats is an Openfire monitoring plugin.
 
-This plugin writes statistics data to a plain textfile from where it can 
-be parsed by Munin or any other external monitoring tool. 
+The plugin writes statistics data to a plain textfile from where it can 
+be parsed by Munin or any other external monitoring tool.

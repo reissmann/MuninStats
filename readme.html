@@ -4,6 +4,35 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>MuninStats Plugin Readme</title>
+	<style type="text/css">
+		body, th, td {
+			font-size : 100%;
+			font-family : tahoma, verdana, arial, helvetica, sans-serif;
+			font-size : 0.8em;
+		}
+		h1 {
+			font-size : 1.4em;
+			font-weight: bold;
+			font-family : tahoma, arial, helvetica, sans-serif;						
+			border-bottom : 1px #ccc solid;
+			padding-bottom : 2px;
+		}
+		h2 {
+			font-size : 12pt;
+			font-weight : bold;
+		}
+		p {
+			padding-left : 20px;
+		}
+		ul {
+			padding-left : 40px;
+		}
+		tt {
+			font-family : courier new;
+			font-weight : bold;
+			color : #060;
+		}
+	</style>
 </head>
 <body>
 
@@ -11,10 +40,9 @@
 
 <h2>Overview</h2>
 <p>
-An Openfire Monitoring plugin.<br />
-This plugin writes statistics data to a plain textfile from where it can 
-be parsed by Munin or any other external monitoring tool. Statistics that 
-will be exported include:
+MuninStats is an Openfire monitoring plugin. The plugin writes statistics 
+data to a plain textfile from where it can be parsed by Munin or any other 
+external monitoring tool. Statistics that will be exported include:
 </p>
 <ul>
 <li>user (registered users, online users, online ressources)</li>
@@ -22,5 +50,31 @@ will be exported include:
 <li>memory (available, free and used memory)</li>
 <li>server2server connections</li>
 </ul>
+
+<h2>Installation</h2>
+<p>
+Copy MuninStats.jar into the plugins directory of your Openfire installation. 
+The plugin will then be automatically deployed. To upgrade to a new version, 
+copy the new MuninStats.jar file over the existing file.
+</p>
+
+<h2>Confiuguration</h2>
+<p>
+You have to configure the location where the plugin stores statuslogs as well 
+as the interval for the plugin to export new data. 
+</p>
+
+<ul>
+	<li><tt>plugin.muninstats.statuslogfile</tt><br />
+		The absolute location of the file where statistics will be stored. This 
+		variable defaults to <b>/opt/openfire/resources/statistics/muninstats.log</b>.
+	</li>
+	
+	<li><tt>plugin.muninstats.updateinterval</tt><br />
+		The interval for exporting new statistics in seconds. This variable
+		defaults to <b>300 seconds</b>.
+	</li>
+</ul>
+
 </body>
 </html>
