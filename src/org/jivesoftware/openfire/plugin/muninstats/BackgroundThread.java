@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, Sven Reissmann
+ * Copyright (c) 2011, Sven Reissmann, Martin Wuest
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 
 /**
  * This class manages the background-thread
- * based on code by Martin Wuest
  */
 public class BackgroundThread implements Runnable {
 	private Thread thread;

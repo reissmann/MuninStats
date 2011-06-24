@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2011, Sven Reissmann
+ * Copyright (c) 2011, Sven Reissmann, Martin Wuest
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -29,7 +29,6 @@ package org.jivesoftware.openfire.plugin.muninstats;
  * This is the baseclass for all events.
  * Events are Objects which want to be executed at a specific time.
  * @see BackgroundThread
- * based on code by Martin Wuest
  */
 public abstract class Event implements Comparable<Event> {
 	private long eventID;
